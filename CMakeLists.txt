@@ -16,15 +16,33 @@ set(PICO_EXAMPLES_PATH ${PROJECT_SOURCE_DIR})
 # Initialize the SDK
 pico_sdk_init()
 
-#include(example_auto_set_url.cmake)
-# Add blink example
-add_subdirectory(blink)
-
 add_compile_options(-Wall
         -Wno-format          # int != int32_t as far as the compiler is concerned because gcc has int32_t as long int
         -Wno-unused-function # we have some for the docs that aren't called
         -Wno-maybe-uninitialized
+        $<$<COMPILE_LANGUAGE:CXX>:-fconcepts>
         )
 
-# Hardware-specific examples in subdirectories:
+
+# Executables
+
+set(BSP_DIR bsp)
+set(BSP_SRCS
+    ${BSP_DIR}/gpio/gpio.cpp
+)
+
+add_executable(pico_cpp
+        blink/src/blink.cpp
+        ${BSP_SRCS}
+        )
+
+set(BSP_INC_DIR ${BSP_DIR})
+include_directories(blink/inc)
+include_directories(${BSP_INC_DIR})
+
+# pull in common dependencies
+target_link_libraries(pico_cpp pico_stdlib)
+
+# create map/bin/hex file etc.
+pico_add_extra_outputs(pico_cpp)
 
