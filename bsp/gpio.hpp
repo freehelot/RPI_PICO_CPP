@@ -1,16 +1,6 @@
 #include "pico/stdlib.h"
 
 
-/*
-2 types of GPIO possible:
-- Input
-- Output
-
-These 2 types can then have different functions/properties,
-but some functions/properties are similar.
-
-*/
-
 class GpioOutputSimple
 {
     private:
